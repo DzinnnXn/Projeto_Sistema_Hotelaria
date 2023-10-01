@@ -3,8 +3,8 @@ class Hotel:
         self.nome = nome
         self.endereco = endereco
         self.cnpj = cnpj
-        self.cliente = {}
-        self.reserva = {}
+        self.cliente = {}  
+        self.reserva = []
 
     def cadastrarCliente(self, id, nome, cpf, tel):
         self.id = id
@@ -17,17 +17,36 @@ class Hotel:
         for chave,valor in self.cliente.items():
             print(f"ID:{chave} - Nome: {valor[0]} - CPF: {valor[1]} - Telefone: {valor[2]}")
     
-    def reservarQuarto(self):
-        pass
-    
+    def reservarQuarto(self, nome_cliente, data_inicio, data_fim):
+        if self.qtd > 0:
+            reserva = {"cliente": nome_cliente, "data_inicio": data_inicio, "data_fim": data_fim}
+            self.reservas.append(reserva)
+            self.qtd -= 1
+            print(f"Quarto reservado para {nome_cliente} de {data_inicio} a {data_fim}.")
+        else:
+            print("Quarto indisponível para reserva.")
+
     def listarReservas(self):
-        pass
-    
-    def cancelarReserva(self):
-        pass
+        if self.reservas:
+            print("Reservas do quarto:")
+            for reserva in self.reservas:
+                print(f"Cliente: {reserva['cliente']}, Data de Início: {reserva['data_inicio']}, Data de Fim: {reserva['data_fim']}")
+        else:
+            print("Nenhuma reserva para este quarto.")
+
+    def cancelarReserva(self, nome_cliente):
+        for reserva in self.reservas:
+            if reserva['cliente'] == nome_cliente:
+                self.reservas.remove(reserva)
+                self.qtd += 1
+                print(f"Reserva para {nome_cliente} cancelada com sucesso.")
+                break
+        else:
+            print(f"Não foi encontrada nenhuma reserva para {nome_cliente}.")
 
     def disponibilidadeQuarto(self):
-        pass
+        disponivel = self.qtd
+        print(f"Quarto disponível: {disponivel} de {self.qtd + len(self.reservas)}")
 
 class Quarto:
     def __init__(self, qtd, capacidade, valor, desc):
